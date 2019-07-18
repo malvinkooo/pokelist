@@ -3,7 +3,7 @@
         <v-container>
             <v-layout justify-space-between align-center>
                 <v-flex xs12 sm8 md3>
-                    <v-select :items="displayItems" label="Показать"></v-select>
+                    <v-select :items="displayItems" label="Показать" @change="onSelectChanged"></v-select>
                 </v-flex>
                 <v-flex xs12 sm8 md2 text-xs-right>
                     <v-btn icon class="ma-0" @click="setCardsMode('list')">
@@ -82,6 +82,10 @@ export default {
         setCardsMode(type) {
             this.cardsType = type;
         },
+
+        onSelectChanged(val) {
+            this.$store.dispatch("getPokeList", val);
+        }
     },
 
     components: {

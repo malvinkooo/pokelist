@@ -20,9 +20,9 @@ export const mutations = {
 }
 
 export const actions = {
-    getPokeList(context) {
+    getPokeList(context, limit, offset) {
         return axios
-            .get("https://pokeapi.co/api/v2/pokemon/?limit=5&offset=0")
+            .get(`https://pokeapi.co/api/v2/pokemon/?limit=${limit ? limit : 5}&offset=${offset ? offset : 0}`)
             .then(response => {
                 context.commit("setTotalPokeCount", response.data.count);
 
