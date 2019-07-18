@@ -1,7 +1,10 @@
 <template>
     <v-flex xs12 sm6 lg4>
         <v-card>
-            <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" height="200px"></v-img>
+            <v-img
+                src="https://cdn.vuetifyjs.com/images/cards/foster.jpg"
+                contain
+                height="200px"></v-img>
 
             <v-card-title primary-title>
                 <div>
