@@ -4,8 +4,11 @@
             <v-layout>
                 <v-flex xs3>
                     <v-img
-                        src="https://cdn.vuetifyjs.com/images/cards/foster.jpg"
-                        height="125px"
+                        :src="frontImg"
+                        height="auto"
+                        max-height="100px"
+                        width="auto"
+                        max-width="100%"
                         contain
                     ></v-img>
                 </v-flex>
@@ -13,7 +16,7 @@
                     <v-card-title primary-title>
                         <div>
                             <div class="headline">{{ name }}</div>
-                            <div>{{ weight }}</div>
+                            <div>Вес: {{ weight }}. Рост: {{ height }}. Опыт: {{ base_experience }}.</div>
                             <v-btn flat color="red accent-1" class="ma-0">Подробнее</v-btn>
                         </div>
                     </v-card-title>
@@ -24,6 +27,17 @@
 </template>
 <script>
 export default {
-    props: ["name", "weight"]
-}
+    props: ["name", "weight", "height", "base_experience", "sprites"],
+
+    computed: {
+        frontImg() {
+            return this.sprites.front_default;
+        }
+    }
+};
 </script>
+<style>
+.headline {
+    text-transform: capitalize;
+}
+</style>
