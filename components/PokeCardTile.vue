@@ -1,6 +1,6 @@
 <template>
     <v-flex xs12 sm6 lg4>
-        <v-card>
+        <v-card class="ma-2 pt-2">
             <v-img
                 src="https://cdn.vuetifyjs.com/images/cards/foster.jpg"
                 contain
@@ -8,8 +8,8 @@
 
             <v-card-title primary-title>
                 <div>
-                    <div class="headline">Top western road trips</div>
-                    <span class="grey--text">1,000 miles of wonder</span>
+                    <div class="headline">{{ name }}</div>
+                    <span class="grey--text">{{ weight }}</span>
                 </div>
             </v-card-title>
 
@@ -21,6 +21,6 @@
 </template>
 <script>
 export default {
-    
+    props: ["name", "weight"]
 }
 </script>

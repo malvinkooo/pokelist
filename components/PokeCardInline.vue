@@ -12,8 +12,8 @@
                 <v-flex xs9>
                     <v-card-title primary-title>
                         <div>
-                            <div class="headline">Supermodel</div>
-                            <div>lorem</div>
+                            <div class="headline">{{ name }}</div>
+                            <div>{{ weight }}</div>
                             <v-btn flat color="red accent-1" class="ma-0">Подробнее</v-btn>
                         </div>
                     </v-card-title>
@@ -24,6 +24,6 @@
 </template>
 <script>
 export default {
-    
+    props: ["name", "weight"]
 }
 </script>
