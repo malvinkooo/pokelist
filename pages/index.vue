@@ -36,8 +36,8 @@
                         class="mt-4"
                         color="red accent-1"
                         v-model="currentPage"
-                        :length="pagination.length"
-                        :total-visible="pagination.totalVisible"
+                        :length="length"
+                        :total-visible="totalVisible"
                         @input="onPageChange"
                     ></v-pagination>
                 </v-flex>
@@ -53,28 +53,21 @@ import PokeCardTile from "~/components/PokeCardTile.vue";
 import axios from "axios";
 
 export default {
-    fetch({store, query}) {
+    fetch({ store, query }) {
+        console.log(query);
         return store.dispatch("getPokeList", {
-                page: Number(query.page),
-                offset: Number(query.offset),
-                limit: Number(query.limit)
-            }
-        );
+            page: Number(query.page),
+            offset: Number(query.offset),
+            limit: Number(query.limit)
+        });
     },
 
     data() {
         return {
             displayItems: ["5", "10", "20", "30"],
-            pagination: {
-                length: null,
-                totalVisible: 6
-            },
-            cardsType: "list",
+            totalVisible: 6,
+            cardsType: "list"
         };
-    },
-
-    created() {
-        this.pagination['length'] = Math.ceil(this.$store.state.count / this.$store.state.currentLimit);
     },
 
     computed: {
@@ -84,6 +77,12 @@ export default {
 
         currentPage() {
             return this.$store.state.currentPage;
+        },
+
+        length() {
+            return Math.ceil(
+                this.$store.state.count / this.$store.state.currentLimit
+            );
         }
     },
 
@@ -93,19 +92,37 @@ export default {
         },
 
         onSelectChanged(val) {
-            let offset = this.currentPage === 1 ? 0 : ((this.currentPage - 1) * Number(val));
+            let offset =
+                this.currentPage === 1
+                    ? 0
+                    : (this.currentPage - 1) * Number(val);
             console.log(offset);
 
-            this.$router.push(`/?page=${this.currentPage}&offset=${offset}&limit=${Number(val)}`);
-            this.$store.dispatch("getPokeList", {page: this.currentPage, limit: Number(val), offset});
+            this.$router.push(
+                `/?page=${this.currentPage}&offset=${offset}&limit=${Number(
+                    val
+                )}`
+            );
+            this.$store.dispatch("getPokeList", {
+                page: this.currentPage,
+                limit: Number(val),
+                offset
+            });
         },
 
         onPageChange(page) {
-            let offset = page === 1 ? 0 : ((page - 1) * this.$store.state.currentLimit);
+            let offset =
+                page === 1 ? 0 : (page - 1) * this.$store.state.currentLimit;
 
-            this.$router.push(`/?page=${page}&offset=${offset}&limit=${this.$store.state.currentLimit}`);
-            this.$store.dispatch("getPokeList", {page, limit: this.$store.state.currentLimit, offset});
-        },
+            this.$router.push(
+                `/?page=${page}&offset=${offset}&limit=${this.$store.state.currentLimit}`
+            );
+            this.$store.dispatch("getPokeList", {
+                page,
+                limit: this.$store.state.currentLimit,
+                offset
+            });
+        }
     },
 
     components: {

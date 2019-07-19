@@ -32,16 +32,9 @@ export const mutations = {
 
 export const actions = {
     getPokeList(context, {page=1, offset=0, limit=5}) {
-        // console.log("store_page:", page);
-        // console.log("store_offset:", offset);
-        // console.log("store_limit:", limit);
-
         context.commit("setCurrentOffset", offset);
         context.commit("setCurrentLimit", limit);
         context.commit("setCurrentPage", page);
-
-        console.log("limit", context.state.currentLimit);
-
 
         return axios
             .get(`https://pokeapi.co/api/v2/pokemon/?limit=${context.state.currentLimit}&offset=${context.state.currentOffset}`)

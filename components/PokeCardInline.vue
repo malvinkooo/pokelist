@@ -5,8 +5,8 @@
                 <v-flex xs3>
                     <div class="img-container">
                         <div class="img-inner">
-                            <v-img :src="frontImg" contain class="img-front"></v-img>
-                            <v-img :src="backImg" contain class="img-back"></v-img>
+                            <v-img :src="frontImg ? frontImg : ''" contain class="img-front"></v-img>
+                            <v-img :src="backImg ? backImg : ''" contain class="img-back"></v-img>
                         </div>
                     </div>
                 </v-flex>
