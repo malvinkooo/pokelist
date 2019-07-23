@@ -3,28 +3,30 @@
         <v-container>
             <v-layout justify-space-between align-center>
                 <v-flex xs12 sm8 md3>
-                    <v-select :items="displayItems" label="Показать" @change="onSelectChanged"></v-select>
+                    <v-select
+                        :items="displayItems"
+                        label="Показать"
+                        :value="currentLimit"
+                        @change="onSelectChanged"
+                    ></v-select>
                 </v-flex>
                 <v-flex xs12 sm8 md2 text-xs-right>
-                    <v-btn icon class="ma-0" @click="setCardsMode('list')">
+                    <v-btn icon class="ma-0" @click="toggleCardsType">
                         <v-icon
                             large
-                            :color="cardsType === 'list' ? 'red accent-1': ''"
-                        >view_headline</v-icon>
-                    </v-btn>
-                    <v-btn icon class="ma-0" @click="setCardsMode('tile')">
-                        <v-icon large :color="cardsType === 'tile' ? 'red accent-1': ''">apps</v-icon>
+                            color="red accent-1"
+                        >{{ isCardsList ? "view_headline" : "apps"}}</v-icon>
                     </v-btn>
                 </v-flex>
             </v-layout>
         </v-container>
 
         <v-container>
-            <v-layout row wrap justify-flex-start v-if="cardsType === 'list'">
+            <v-layout row wrap justify-flex-start v-if="isCardsList">
                 <PokeCardInline v-for="(poke, index) in pokeList" v-bind="poke" :key="index"></PokeCardInline>
             </v-layout>
 
-            <v-layout row wrap justify-flex-start v-else-if="cardsType === 'tile'">
+            <v-layout row wrap justify-flex-start v-else>
                 <PokeCardTile v-for="(poke, index) in pokeList" v-bind="poke" :key="index"></PokeCardTile>
             </v-layout>
         </v-container>
@@ -54,41 +56,51 @@ import axios from "axios";
 
 export default {
     fetch({ store, query }) {
-        console.log(query);
         return store.dispatch("getPokeList", {
-            page: Number(query.page),
-            offset: Number(query.offset),
-            limit: Number(query.limit)
+            offset: Number(query.offset) || undefined,
+            limit: Number(query.limit) || undefined
         });
     },
 
     data() {
         return {
-            displayItems: ["5", "10", "20", "30"],
+            displayItems: [5, 10, 20, 30],
             totalVisible: 6,
-            cardsType: "list"
+            isCardsList: true
         };
     },
 
     computed: {
         pokeList() {
-            return this.$store.state.pokeList;
+            return this.$store.getters.pokeList;
         },
 
         currentPage() {
-            return this.$store.state.currentPage;
+            const { currentOffset, currentLimit } = this.$store.state;
+            return currentOffset / currentLimit
+                ? currentOffset / currentLimit + 1
+                : 1;
+        },
+
+        currentLimit: {
+            get() {
+                return this.$store.state.currentLimit;
+            },
+
+            set(newLimit) {
+                this.$store.commit("setCurrentLimit", newLimit);
+            }
         },
 
         length() {
-            return Math.ceil(
-                this.$store.state.count / this.$store.state.currentLimit
-            );
+            const { count, currentLimit } = this.$store.state;
+            return Math.ceil(count / currentLimit);
         }
     },
 
     methods: {
-        setCardsMode(type) {
-            this.cardsType = type;
+        toggleCardsType() {
+            this.isCardsList = !this.isCardsList;
         },
 
         onSelectChanged(val) {
@@ -96,13 +108,8 @@ export default {
                 this.currentPage === 1
                     ? 0
                     : (this.currentPage - 1) * Number(val);
-            console.log(offset);
 
-            this.$router.push(
-                `/?page=${this.currentPage}&offset=${offset}&limit=${Number(
-                    val
-                )}`
-            );
+            this.$router.push(`/?offset=${offset}&limit=${Number(val)}`);
             this.$store.dispatch("getPokeList", {
                 page: this.currentPage,
                 limit: Number(val),
@@ -115,7 +122,7 @@ export default {
                 page === 1 ? 0 : (page - 1) * this.$store.state.currentLimit;
 
             this.$router.push(
-                `/?page=${page}&offset=${offset}&limit=${this.$store.state.currentLimit}`
+                `/?offset=${offset}&limit=${this.$store.state.currentLimit}`
             );
             this.$store.dispatch("getPokeList", {
                 page,

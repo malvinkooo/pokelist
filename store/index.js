@@ -3,7 +3,6 @@ import axios from "axios";
 export const state = () => ({
     pokeList: [],
     count: null,
-    currentPage: null,
     currentLimit: null,
     currentOffset: null,
 });
@@ -24,17 +23,18 @@ export const mutations = {
     setCurrentLimit(state, limit) {
         state.currentLimit = limit;
     },
+}
 
-    setCurrentPage(state, page) {
-        state.currentPage = page;
-    }
+export const getters = {
+    pokeList: state => {
+        return state.pokeList;
+    },
 }
 
 export const actions = {
-    getPokeList(context, {page=1, offset=0, limit=5}) {
+    getPokeList(context, {offset=0, limit=5}) {
         context.commit("setCurrentOffset", offset);
         context.commit("setCurrentLimit", limit);
-        context.commit("setCurrentPage", page);
 
         return axios
             .get(`https://pokeapi.co/api/v2/pokemon/?limit=${context.state.currentLimit}&offset=${context.state.currentOffset}`)
