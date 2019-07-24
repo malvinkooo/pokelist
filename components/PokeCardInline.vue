@@ -15,7 +15,12 @@
                         <div>
                             <div class="headline">{{ name }}</div>
                             <div>Вес: {{ weight }}. Рост: {{ height }}. Опыт: {{ base_experience }}.</div>
-                            <v-btn flat color="red accent-1" class="ma-0">Подробнее</v-btn>
+                            <v-btn
+                                flat
+                                color="red accent-1"
+                                class="ma-0"
+                                @click="$emit('cardClicked', id)"
+                            >Подробнее</v-btn>
                         </div>
                     </v-card-title>
                 </v-flex>
@@ -25,15 +30,15 @@
 </template>
 <script>
 export default {
-    props: ["name", "weight", "height", "base_experience", "sprites"],
+    props: ["name", "weight", "height", "base_experience", "sprites", "id"],
 
     computed: {
         frontImg() {
-            return this.sprites.front_default ? this.sprites.front_default : '';
+            return this.sprites.front_default ? this.sprites.front_default : "";
         },
 
         backImg() {
-            return this.sprites.back_default ? this.sprites.back_default : '';
+            return this.sprites.back_default ? this.sprites.back_default : "";
         }
     }
 };

@@ -23,11 +23,11 @@
 
         <v-container>
             <v-layout row wrap justify-flex-start v-if="isCardsList">
-                <PokeCardInline v-for="(poke, index) in pokeList" v-bind="poke" :key="index"></PokeCardInline>
+                <PokeCardInline v-for="(poke, index) in pokeList" v-bind="poke" :key="index" @cardClicked="onCardClick"></PokeCardInline>
             </v-layout>
 
             <v-layout row wrap justify-flex-start v-else>
-                <PokeCardTile v-for="(poke, index) in pokeList" v-bind="poke" :key="index"></PokeCardTile>
+                <PokeCardTile v-for="(poke, index) in pokeList" v-bind="poke" :key="index" @cardClicked="onCardClick"></PokeCardTile>
             </v-layout>
         </v-container>
 
@@ -129,6 +129,10 @@ export default {
                 limit: this.$store.state.currentLimit,
                 offset
             });
+        },
+
+        onCardClick(id) {
+            this.$router.push(`/${id}`);
         }
     },
 
