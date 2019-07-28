@@ -23,11 +23,21 @@
 
         <v-container>
             <v-layout row wrap justify-flex-start v-if="isCardsList">
-                <PokeCardInline v-for="(poke, index) in pokeList" v-bind="poke" :key="index" @cardClicked="onCardClick"></PokeCardInline>
+                <PokeCardInline
+                    v-for="(poke, index) in pokeList"
+                    v-bind="poke"
+                    :key="index"
+                    @cardClicked="onCardClick"
+                ></PokeCardInline>
             </v-layout>
 
             <v-layout row wrap justify-flex-start v-else>
-                <PokeCardTile v-for="(poke, index) in pokeList" v-bind="poke" :key="index" @cardClicked="onCardClick"></PokeCardTile>
+                <PokeCardTile
+                    v-for="(poke, index) in pokeList"
+                    v-bind="poke"
+                    :key="index"
+                    @cardClicked="onCardClick"
+                ></PokeCardTile>
             </v-layout>
         </v-container>
 
@@ -40,7 +50,6 @@
                         v-model="currentPage"
                         :length="length"
                         :total-visible="totalVisible"
-                        @input="onPageChange"
                     ></v-pagination>
                 </v-flex>
             </v-layout>
@@ -51,8 +60,6 @@
 <script>
 import PokeCardInline from "~/components/PokeCardInline.vue";
 import PokeCardTile from "~/components/PokeCardTile.vue";
-
-import axios from "axios";
 
 export default {
     fetch({ store, query }) {
@@ -65,7 +72,7 @@ export default {
     data() {
         return {
             displayItems: [5, 10, 20, 30],
-            totalVisible: 6,
+            totalVisible: 5,
             isCardsList: true
         };
     },
@@ -75,11 +82,17 @@ export default {
             return this.$store.getters.pokeList;
         },
 
-        currentPage() {
-            const { currentOffset, currentLimit } = this.$store.state;
-            return currentOffset / currentLimit
-                ? currentOffset / currentLimit + 1
-                : 1;
+        currentPage: {
+            get() {
+                const { currentOffset, currentLimit } = this.$store.state;
+                return currentOffset / currentLimit
+                    ? currentOffset / currentLimit + 1
+                    : 1;
+            },
+
+            set(newPage) {
+                this.onPageChange(newPage);
+            }
         },
 
         currentLimit: {
@@ -142,3 +155,9 @@ export default {
     }
 };
 </script>
+
+<style>
+.v-image__image--contain {
+    background-size: auto;
+}
+</style>

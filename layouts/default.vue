@@ -1,8 +1,10 @@
 <template>
     <v-app>
         <v-toolbar color="red accent-1" dark>
-            <v-icon>home</v-icon>
-            <v-toolbar-title>PokeList</v-toolbar-title>
+            <router-link to="/" class="link">
+                <v-icon>home</v-icon>
+                <v-toolbar-title>PokeList</v-toolbar-title>
+            </router-link>
         </v-toolbar>
 
         <v-content>
@@ -14,7 +16,15 @@
 <script>
 export default {
     data() {
-        return {}
+        return {};
     }
 };
 </script>
+<style >
+.link {
+    color: inherit;
+    text-decoration: none;
+    width: auto;
+    display: flex;
+}
+</style>
